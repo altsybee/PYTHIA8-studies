@@ -19,6 +19,8 @@
 #include "TH2D.h"
 #include "TH1D.h"
 #include "TH1F.h"
+#include <TArrayF.h>
+#include <TObjString.h>
 
 
 #include "StrangenessAnalysis.h"
@@ -28,8 +30,10 @@ using namespace std;
 
 
 
-TH2D *fHist2DEtaPhi;
-TH2D *fHist2DEtaPhiWeightMinv;
+//TH2D *fHist2DEtaPhi;
+//TH2D *fHist2DEtaPhiWeightMinv;
+
+
 
 
 
@@ -50,6 +54,24 @@ StrangenessAnalysis::StrangenessAnalysis()
 {
     //    strFr = new StringFragmentation;
 }
+
+void StrangenessAnalysis::extractPidMap(TFile *file, map <int,string> &pidMap)
+{
+    TArrayF *arrPid = (TArrayF*)file->Get( "arrPid" );
+    TH1D *histArrPidNames  = (TH1D*)file->Get( "histArrPidNames" );
+    for (int i = 0; i < arrPid->GetSize(); i++)
+    {
+        pidMap.insert ( pair<int,string>(  arrPid->At(i),histArrPidNames->GetXaxis()->GetBinLabel( i+1 )  ) );
+    }
+
+    int iPid = 0;
+    for (auto it = pidMap.begin(); it != pidMap.end(); ++it)
+    {
+        cout << iPid << ": " << (*it).first << " : " << (*it).second << endl;
+        iPid++;
+    }
+}
+
 
 void StrangenessAnalysis::setVariablesForTrees()
 {
@@ -178,9 +200,9 @@ void StrangenessAnalysis::tuneAnalysers() //int nEvents )
                 tilePhiWidth = 2*TMath::Pi();
             analyser->SetEtaTileWidth( tileEtaWidth );
             analyser->SetPhiTileWidth( tilePhiWidth );
-            int nTilesEta = 7;//0.8 / tileEtaWidth * 4 - 1;
+            int nTilesEta = 1;//7;//0.8 / tileEtaWidth * 4 - 1;
             //        int nTilesPhi = 2*TMath::Pi() / tilePhiWidth * 2;
-            int nTilesPhi = 2*TMath::Pi() / tilePhiWidth * 2;
+            int nTilesPhi = 1;//2*TMath::Pi() / tilePhiWidth * 2;
             analyser->SetNumberOfEtaTiles( nTilesEta );
             analyser->SetNumberOfPhiTiles( nTilesPhi );
             analyser->SetExtraPhiShift( extraPhiShift );
@@ -202,11 +224,35 @@ void StrangenessAnalysis::RunAnalysis() //int nEvents )
 
     TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output.root" );
 
-    // ##### particle tree
+    treeEvent = (TTree*)file->Get( "eventMultTree" );
+
+
+    // ##### trees
     treeParticles = (TTree*)file->Get( "particleTree" );
     treeEvent = (TTree*)file->Get( "eventMultTree" );
     setVariablesForTrees();
 
+    //    //special tree with pid and names
+    //    //    std::vector<int> *vPid = 0;
+    //    //    std::vector<string> *vNames = 0;
+    //    //    treePidNames = (TTree*)file->Get( "pidNames" );
+    //    //    treePidNames->SetBranchAddress("vPid",&vPid);
+    //    //    treePidNames->SetBranchAddress("vNames",&vNames);
+
+    //    //    for (int i = 0; i < vPid->size(); i++)
+    //    //    {
+    //    //        cout << i << ": " << vPid->at(i) << " : " << vNames->at(i) << endl;
+    //    //    }
+    //    arrPidNames->ls();
+    //    for (int i = 0; i < arrPid->GetSize(); i++)
+    //    {
+    //        cout << i << ": " << arrPid->At(i) << " : " << ((TObjString*)arrPidNames->At(i))->GetString() << endl;
+    //    }
+
+    map <int,string> pidMap;
+    extractPidMap(file, pidMap);
+
+    //init analysers
     for ( int iAn = 0; iAn < nAnalysers; iAn++ )
         analysersArray[iAn]->InitDataMembers();
 

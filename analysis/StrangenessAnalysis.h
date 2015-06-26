@@ -30,6 +30,7 @@ private:
 //    void tuneHistogram2D(TH2D *h);
     void setVariablesForTrees();
     void tuneAnalysers();
+    void extractPidMap(TFile *file, map<int, string> &pidMap);
 
     TRandom3 *fRand;
 //    DiHadronAnalyser **analysersArray;
@@ -115,6 +116,7 @@ private:
 
     TTree *treeParticles;
     TTree *treeEvent;
+//    TTree *treePidNames;
 };
 
 
