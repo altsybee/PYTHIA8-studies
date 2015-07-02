@@ -12,51 +12,9 @@ class TileCorrelations;
 //class DiHadronAnalyser;
 //struct MiniEvent;
 
-class StrangenessAnalysis
+
+struct Particle
 {
-public:
-    StrangenessAnalysis();
-//    void PrepareAnalysisAndRun();
-    void RunAnalysis();
-
-private:
-//    TH2D* ExtractDihadronHist( DiHadronAnalyser *an );//TList *outList );
-////    void UpdateEvent(MiniEvent *event, Double_t Eta , Double_t Phi, Double_t Pt , Int_t Charge);
-//    void analyseMiniEvent(MiniEvent *miniEvent );
-//    void analyseMixedMiniEvents(MiniEvent *miniEvent1, MiniEvent *miniEvent2 );
-
-//    void decayStringIntoParticles( int nParticlesInString, TLorentzVector *vArr, double fictionRhoPt );
-//    int probabilityChargePlusMinusNeutral();
-//    void tuneHistogram2D(TH2D *h);
-    void setVariablesForTrees();
-    void tuneAnalysers();
-    void extractPidMap(TFile *file, map<int, string> &pidMap);
-
-    TRandom3 *fRand;
-//    DiHadronAnalyser **analysersArray;
-
-    TH1D *histEtaRho;
-    TH1D *histEtaPion;
-    TH1D *histPhiPion;
-    TH1D *histPtRho;
-    TH1D *histPtRhoWithWeight;
-    TH1D *histPtPionFromRho;
-    TH1D *histPtPionFromString;
-    TH1D *histPtPionAll;
-    TH1D *histPtPionWithWeight;
-
-    TH1D *histPtInvM;
-    TH1D *histPtMixedInvM;
-
-//    MiniEvent *miniEv1, *miniEv2;
-
-    //string fragmentation
-//    StringFragmentation *strFr;
-
-    TileCorrelations **analysersArray;
-    int nAnalysers;
-
-    // ##### prepare variables for the trees
     // particle tree vars
     int eventId   ;
     int particleId;
@@ -104,6 +62,59 @@ private:
     bool   isDiquark;
     bool   isParton;
     bool   isHadron;
+};
+
+
+class StrangenessAnalysis
+{
+public:
+    StrangenessAnalysis();
+//    void PrepareAnalysisAndRun();
+    void RunAnalysis(int nEventsToAnalyse );
+
+private:
+//    TH2D* ExtractDihadronHist( DiHadronAnalyser *an );//TList *outList );
+////    void UpdateEvent(MiniEvent *event, Double_t Eta , Double_t Phi, Double_t Pt , Int_t Charge);
+//    void analyseMiniEvent(MiniEvent *miniEvent );
+//    void analyseMixedMiniEvents(MiniEvent *miniEvent1, MiniEvent *miniEvent2 );
+
+//    void decayStringIntoParticles( int nParticlesInString, TLorentzVector *vArr, double fictionRhoPt );
+//    int probabilityChargePlusMinusNeutral();
+//    void tuneHistogram2D(TH2D *h);
+    void setVariablesForTrees();
+    void tuneAnalysers();
+    void extractPidMap(TFile *file);
+    TString getDecayChain(Particle &currentParticle, TString decayChain = "0");
+    void getDecayChainById(Particle &part);
+    bool hasPrimaryMotherByALICEdefinition(Particle &part);
+
+    TRandom3 *fRand;
+//    DiHadronAnalyser **analysersArray;
+
+//    TH1D *histEtaRho;
+//    TH1D *histEtaPion;
+//    TH1D *histPhiPion;
+//    TH1D *histPtRho;
+//    TH1D *histPtRhoWithWeight;
+//    TH1D *histPtPionFromRho;
+//    TH1D *histPtPionFromString;
+//    TH1D *histPtPionAll;
+//    TH1D *histPtPionWithWeight;
+
+//    TH1D *histPtInvM;
+//    TH1D *histPtMixedInvM;
+
+//    MiniEvent *miniEv1, *miniEv2;
+
+    //string fragmentation
+//    StringFragmentation *strFr;
+
+    TileCorrelations **analysersArray;
+    int nAnalysers;
+
+    // ##### prepare variables for the trees
+    Particle part;
+    Particle partArr[5000];
 
     // event info tree vars
     int nChargedFromTree;
