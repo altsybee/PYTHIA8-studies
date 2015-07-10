@@ -177,16 +177,16 @@ void StrangenessAnalysis::setVariablesForTrees()
     treeParticles->SetBranchAddress("mother2"     ,&part.mother2    );
     treeParticles->SetBranchAddress("daughter1"   ,&part.daughter1  );
     treeParticles->SetBranchAddress("daughter2"   ,&part.daughter2  );
-//    treeParticles->SetBranchAddress("px"          ,&part.px         );
-//    treeParticles->SetBranchAddress("py"          ,&part.py         );
-//    treeParticles->SetBranchAddress("pz"          ,&part.pz         );
-//    treeParticles->SetBranchAddress("e"           ,&part.e          );
-//    treeParticles->SetBranchAddress("m"           ,&part.m          );
-//    treeParticles->SetBranchAddress("hasVertex"   ,&part.hasVertex  );
-//    treeParticles->SetBranchAddress("xProd"       ,&part.xProd      );
-//    treeParticles->SetBranchAddress("yProd"       ,&part.yProd      );
-//    treeParticles->SetBranchAddress("zProd"       ,&part.zProd      );
-//    treeParticles->SetBranchAddress("tProd"       ,&part.tProd      );
+    //    treeParticles->SetBranchAddress("px"          ,&part.px         );
+    //    treeParticles->SetBranchAddress("py"          ,&part.py         );
+    //    treeParticles->SetBranchAddress("pz"          ,&part.pz         );
+    //    treeParticles->SetBranchAddress("e"           ,&part.e          );
+    //    treeParticles->SetBranchAddress("m"           ,&part.m          );
+    //    treeParticles->SetBranchAddress("hasVertex"   ,&part.hasVertex  );
+    //    treeParticles->SetBranchAddress("xProd"       ,&part.xProd      );
+    //    treeParticles->SetBranchAddress("yProd"       ,&part.yProd      );
+    //    treeParticles->SetBranchAddress("zProd"       ,&part.zProd      );
+    //    treeParticles->SetBranchAddress("tProd"       ,&part.tProd      );
     treeParticles->SetBranchAddress("tau"         ,&part.tau        );
 
     treeParticles->SetBranchAddress("theta"       ,&part.theta      );
@@ -198,16 +198,16 @@ void StrangenessAnalysis::setVariablesForTrees()
     treeParticles->SetBranchAddress("isFinal"   ,&part.isFinal        );
 
     treeParticles->SetBranchAddress("isCharged"   ,&part.isCharged    );
-//    treeParticles->SetBranchAddress("isNeutral"   ,&part.isNeutral    );
+    //    treeParticles->SetBranchAddress("isNeutral"   ,&part.isNeutral    );
     treeParticles->SetBranchAddress("tau0"        ,&part.tau0         );
-//    treeParticles->SetBranchAddress("mayDecay"    ,&part.mayDecay     );
-//    treeParticles->SetBranchAddress("canDecay"    ,&part.canDecay     );
-//    treeParticles->SetBranchAddress("isResonance" ,&part.isResonance  );
-//    treeParticles->SetBranchAddress("isVisible"   ,&part.isVisible    );
-//    treeParticles->SetBranchAddress("isLepton"    ,&part.isLepton     );
-//    treeParticles->SetBranchAddress("isQuark"     ,&part.isQuark      );
-//    treeParticles->SetBranchAddress("isGluon"     ,&part.isGluon      );
-//    treeParticles->SetBranchAddress("isDiquark"   ,&part.isDiquark    );
+    //    treeParticles->SetBranchAddress("mayDecay"    ,&part.mayDecay     );
+    //    treeParticles->SetBranchAddress("canDecay"    ,&part.canDecay     );
+    //    treeParticles->SetBranchAddress("isResonance" ,&part.isResonance  );
+    //    treeParticles->SetBranchAddress("isVisible"   ,&part.isVisible    );
+    //    treeParticles->SetBranchAddress("isLepton"    ,&part.isLepton     );
+    //    treeParticles->SetBranchAddress("isQuark"     ,&part.isQuark      );
+    //    treeParticles->SetBranchAddress("isGluon"     ,&part.isGluon      );
+    //    treeParticles->SetBranchAddress("isDiquark"   ,&part.isDiquark    );
     treeParticles->SetBranchAddress("isParton"    ,&part.isParton     );
     treeParticles->SetBranchAddress("isHadron"    ,&part.isHadron     );
 
@@ -308,9 +308,22 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
     //    fHist2DEtaPhi = new TH2D("fHist2DEtaPhi",";#eta;#phi",20,-2,2,20,-2,2);
     //    fHist2DEtaPhiWeightMinv = new TH2D("fHist2DEtaPhiWeightMinv",";#eta;#phi",20,-2,2,25,-2,TMath::TwoPi());
 
+    //    TString strTuneName("100k_ct1cm_Monash2013_pure");
+    //    TString strTuneName("10kTEST_ct1cm_Monash2013_newCR_mode0");
+
+    //        TString strTuneName("100k_ct1cm_Monash2013_newCR_mode0");
+    //        TString strTuneName("100k_ct1cm_Monash2013_newCR_mode2");
+
+//    TString strTuneName("1000k_ct1cm_Monash2013_pure");
+//    TString strTuneName("1000k_ct1cm_Monash2013_newCR_mode2");
+            TString strTuneName("1000k_ct1cm_Monash2013_noCR");
+
     //    TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output10k.root" );
     //    TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output10k_ct1cm_Monash2013.root" );
-    TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output100k_ct1cm_Monash2013_newCRmode0.root" );
+    //    TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output100k_ct1cm_Monash2013_newCRmode0.root" );
+    //    TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output100k_ct1cm_Monash2013_pure.root" );
+    //    TFile *file = new TFile( "/opt/mygit/PYTHIA_resonances/output100k_ct1cm_Monash2013_noCR.root" );
+    TFile *file = new TFile( Form("/opt/mygit/PYTHIA_resonances/output%s.root", strTuneName.Data()) );
 
     treeEvent = (TTree*)file->Get( "eventMultTree" );
 
@@ -363,37 +376,120 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
 
 
     //for correlations:
-    const int nPairs = 1;//9;
+    const int nRegularWins = 7;
+    const int nSpecWins = 7;
+    const int nPairs = nRegularWins+nSpecWins;//9;
     double etaMaxF[nPairs];
     double etaMinF[nPairs];
 
     double etaMaxB[nPairs];
     double etaMinB[nPairs];
 
-    TH2D *histNN[nPairs];
+    //arrays to set windows explicitly
+    //    double etaMaxF[nPairs] = {  0.8, 0.8,   2.4,  2.4,  2.4,  };
+    //    double etaMinF[nPairs] = { -0.8,   0,  -2.4,    0,  1.0,  };
+
+    //    double etaMaxB[nPairs] = {  0.8,    0,  2.4,    0, -1.0,  };
+    //    double etaMinB[nPairs] = { -0.8, -0.8, -2.4, -2.4, -2.4,  };
+    double arrEtaMaxF[nSpecWins] = {  0.8, 0.8,   2.4,  2.4,  2.4,  2.0,  0.5  };
+    double arrEtaMinF[nSpecWins] = { -0.8,   0,  -2.4,    0,  0.5,  1.0, -0.5  };
+
+    double arrEtaMaxB[nSpecWins] = {  0.8,    0,  2.4,    0, -0.5, -1.0,  0.5  };
+    double arrEtaMinB[nSpecWins] = { -0.8, -0.8, -2.4, -2.4, -2.4, -2.0, -0.5  };
+
+
+    // ##### correlation histograms
+    // NN
+    TH2D *histNN[nPairs];       // N vs N
+    TH2D *histNsNs[nPairs];     // Nstrange vs Nstrange
+    TH2D *histNsN[nPairs];      // Nstrange vs N
+    TH2D *histNskN[nPairs];     // Nstrange+Kaons+/- vs N
+
+    TH2D *histNlN[nPairs];      // Nlambda vs N
+    TH2D *histNlNl[nPairs];     // Nlambda vs Nlambda
+    TH2D *histNprotonN[nPairs];
+
+    // PtN
     TH2D *histPtN[nPairs];
-    const double winEtaSize = 4.8;
-    const double winEtaStep = 0.5;
-    const double winEtaStartEdge = -2.4;
+    TH2D *histPtNs[nPairs];
+    TH2D *histPtNsk[nPairs];
+    TH2D *histPtNl[nPairs];
+
+    // ratio correlations
+    TH2D *histKtoPion_N[nPairs];
+    TH2D *histLambdaToPion_N[nPairs];
+    TH2D *histProtonToPion_N[nPairs];
+    TH2D *histKtoPion_KtoPion[nPairs];
+    TH2D *histLambdaToPion_LambdaToPion[nPairs];
+
+    TH2D *histKtoPion_Pt[nPairs];
+    TH2D *histLambdaToPion_Pt[nPairs];
+    TH2D *histProtonToPion_Pt[nPairs];
+
+    //PtPt
+    TH2D *histPtPt[nPairs];
+    //EtEt
+//    TH2D *histEtEt[nPairs];
+
+    TH2D *histWindowsEtaBounds;       // to remember eta positions of windows
+    histWindowsEtaBounds = new TH2D( "histWindowsEtaBounds", ";#eta bounds;n_{win pair}", nPairs, -0.5, nPairs-0.5, 4, -0.5, 3.5);
+
+    const double winEtaSize = 0.5;
+    const double winEtaStep = 0.25;
+    const double winEtaStartEdge = 0;
     for (int i = 0; i < nPairs; ++i)
     {
-        etaMaxF[i] = winEtaStartEdge + i*winEtaStep+winEtaSize;
-        etaMinF[i] = winEtaStartEdge + i*winEtaStep;
+        if ( i < nRegularWins ) // symmetric eta wins with increasing gap
+        {
+            etaMaxF[i] = winEtaStartEdge + i*winEtaStep+winEtaSize;
+            etaMinF[i] = winEtaStartEdge + i*winEtaStep;
+            etaMaxB[i] = -winEtaStartEdge + -i*winEtaStep;
+            etaMinB[i] = -winEtaStartEdge + -i*winEtaStep-winEtaSize;
+        }
+        else
+        {
+            etaMaxF[i] = arrEtaMaxF[i-nRegularWins];
+            etaMinF[i] = arrEtaMinF[i-nRegularWins];
+            etaMaxB[i] = arrEtaMaxB[i-nRegularWins];
+            etaMinB[i] = arrEtaMinB[i-nRegularWins];
+        }
+        histWindowsEtaBounds->SetBinContent(i+1, 3+1, etaMaxF[i]);
+        histWindowsEtaBounds->SetBinContent(i+1, 2+1, etaMinF[i]);
+        histWindowsEtaBounds->SetBinContent(i+1, 1+1, etaMaxB[i]);
+        histWindowsEtaBounds->SetBinContent(i+1, 0+1, etaMinB[i]);
 
-        etaMaxB[i] = -winEtaStartEdge + -i*winEtaStep;
-        etaMinB[i] = -winEtaStartEdge + -i*winEtaStep-winEtaSize;
-
-        cout << "bkwd windowbounds: " << etaMinB[i] << " " << etaMaxB[i]
-                << ", fwd window phi bounds: " << etaMinF[i] << " " << etaMaxF[i]
+        cout << "bkwd window bounds: " << etaMinB[i] << " " << etaMaxB[i]
+                << ", fwd window bounds: " << etaMinF[i] << " " << etaMaxF[i]
                    << endl;
 
-        histNN[i] = new TH2D( Form("histNN%d", i), ";n_{F};n_{B}", 100, -0.5, 99.5, 100, -0.5, 99.5);
-        histPtN[i] = new TH2D( Form("histPtN%d", i), ";n_{F};pT_{B}", 200, -0.5, 199.5, 500, 0, 5);
+        histNN[i] = new TH2D( Form("histNN%d", i), ";n_{F};n_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+        histNsNs[i] = new TH2D( Form("histNsNs%d", i), ";ns_{F};ns_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+        histNsN[i] = new TH2D( Form("histNsN%d", i), ";n_{F};ns_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+        histNskN[i] = new TH2D( Form("histNskN%d", i), ";n_{F};nsk_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+
+        histNlN[i] = new TH2D( Form("histNlN%d", i), ";n_{F};nl_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+        histNlNl[i] = new TH2D( Form("histNlNl%d", i), ";nl_{F};nl_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+        histNprotonN[i] = new TH2D( Form("histNprotonN%d", i), ";n_{F};nProton_{B}", 200, -0.5, 199.5, 200, -0.5, 199.5);
+
+        histPtN[i] = new TH2D( Form("histPtN%d", i), ";n_{F};pT_{B}", 200, -0.5, 199.5, 250, 0, 5);
+        histPtNs[i] = new TH2D( Form("histPtNs%d", i), ";ns_{F};pT_{B}", 200, -0.5, 199.5, 500, 0, 5);
+        histPtNsk[i] = new TH2D( Form("histPtNsk%d", i), ";nsk_{F};pT_{B}", 200, -0.5, 199.5, 500, 0, 5);
+        histPtNl[i] = new TH2D( Form("histPtNl%d", i), ";nl_{F};pT_{B}", 200, -0.5, 199.5, 500, 0, 5);
+
+        histKtoPion_N[i] = new TH2D( Form("histKtoPion_N%d", i), ";n_{F};KtoPion_{B}", 200, -0.5, 199.5, 200, 0, 2);
+        histLambdaToPion_N[i] = new TH2D( Form("histLambdaToPion_N%d", i), ";n_{F};LambdaToPion_{B}", 200, -0.5, 199.5, 200, 0, 2);
+        histProtonToPion_N[i] = new TH2D( Form("histProtonToPion_N%d", i), ";n_{F};ProtonToPion_{B}", 200, -0.5, 199.5, 200, 0, 2);
+        histKtoPion_KtoPion[i] = new TH2D( Form("histKtoPion_KtoPion%d", i), ";KtoPion_{F};KtoPion_{B}", 200, 0, 2, 200, 0, 2);
+        histLambdaToPion_LambdaToPion[i] = new TH2D( Form("histLambdaToPion_LambdaToPion%d", i), ";LambdaToPion_{F};LambdaToPion_{B}", 200, 0, 2, 200, 0, 2);
+
+        histKtoPion_Pt[i] = new TH2D( Form("histKtoPion_Pt%d", i), ";pT_{F};KtoPion_{B}", 100, 0, 5, 200, 0, 2);
+        histLambdaToPion_Pt[i] = new TH2D( Form("histLambdaToPion_Pt%d", i), ";pT_{F};LambdaToPion_{B}", 100, 0, 5, 200, 0, 2);
+        histProtonToPion_Pt[i] = new TH2D( Form("histProtonToPion_Pt%d", i), ";pT_{F};ProtonToPion_{B}", 100, 0, 5, 200, 0, 2);
+
+        histPtPt[i] = new TH2D( Form("histPtPt%d", i), ";pT_{F};pT_{B}", 250, 0, 5, 250, 0, 5);
+//        histEtEt[i] = new TH2D( Form("histEtEt%d", i), ";ET_{F};ET_{B}", 250, 0, 5, 250, 0, 5);
+
     }
-
-
-
-
 
 
     SimpleTrack *simpleTrack = new SimpleTrack;
@@ -455,6 +551,8 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
     TH1D *histEta_species[nSpecies];
     TH1D *histY_species[nSpecies];
 
+    TH1D *histEta_species_in_windows[nSpecies];
+    TH1D *histY_species_in_windows[nSpecies];
 
     TH1D *histYields = new TH1D("histYields",";;", nSpecies, -0.5, nSpecies-0.5);
     for(int i = 0; i < nSpecies; i++)
@@ -463,12 +561,17 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
         histPt_species[i] = new TH1D(Form("histPt_%s", mapPID[arrParticleSpecies[i]].c_str())
                 , ";p_{#rm T} (GeV/c);entries", 40, 0, 8);
         histEta_species[i] = new TH1D(Form("histEta_%s", mapPID[arrParticleSpecies[i]].c_str())
-                , ";#eta;entries", 20, -4, 4);
+                , ";#eta;entries", 200, -10, 10);
         histY_species[i] = new TH1D(Form("histY_%s", mapPID[arrParticleSpecies[i]].c_str())
-                , ";y;entries", 20, -4, 4);
+                , ";y;entries", 200, -10, 10);
+
+        histEta_species_in_windows[i] = new TH1D(Form("histEta_in_wins_%s", mapPID[arrParticleSpecies[i]].c_str())
+                , ";#eta;entries", 200, -10, 10);
+        histY_species_in_windows[i] = new TH1D(Form("histY_in_wins_%s", mapPID[arrParticleSpecies[i]].c_str())
+                , ";y;entries", 200, -10, 10);
     }
 
-    TH1D *histRatios = new TH1D("histRatios",";;", 4, -0.5, 4-0.5);
+//    TH1D *histRatios = new TH1D("histRatios",";;", 4, -0.5, 4-0.5);
 
 
     //    TH1D *hist_Proton_to_pion_vs_pt = new TH1D("hist_Proton_to_pion_vs_pt",";p_{\rm T};", 0, 0, 12);
@@ -594,9 +697,34 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
     //    113: 9902210 : p_diffr+
 
 
-    int nChargedF[nPairs];
-    int nChargedB[nPairs];
+    float nChargedF[nPairs];
+    float nChargedB[nPairs];
+
+    float nChargedFs[nPairs];
+    float nChargedBs[nPairs];
+
+    float nChargedFsk[nPairs];
+    float nChargedBsk[nPairs];
+
+    float nChargedFlambda[nPairs];
+    float nChargedBlambda[nPairs];
+
+    float nChargedFproton[nPairs];
+    float nChargedBproton[nPairs];
+
+    float nChargedFkaon[nPairs];
+    float nChargedBkaon[nPairs];
+
+    float nChargedFpion[nPairs];
+    float nChargedBpion[nPairs];
+
+
+
+    double meanPt_F[nPairs];
     double meanPt_B[nPairs];
+
+
+
 
     //loop over particles in the tree
     for ( int iEntry = 0; iEntry < nentries; iEntry++ )
@@ -612,6 +740,8 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
 
         if ( prevEvId != part.eventId ) //i.e. this is the next event
         {
+            //note: last event will not go here! i.e. we don't "finish" this event (keep it like this?..)
+
             if ( part.eventId >= nEventsToAnalyse ) //we analysed enough events
                 break;
 
@@ -623,14 +753,66 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
             //                continue;
 
             //            histMult_charged->Fill(nChargedFromTree);
-            histMult_charged->Fill(nCharged_inCuts);
-            histMult_Lambda0->Fill(nLambda0_inCuts);
-            histMult_K0->Fill(nK0_inCuts);
 
             //finish prev event if was opened and start new
             if ( prevEvId >= 0 ) //i.e. we have previous event to be closed
+            {
+
                 for ( int iAn = 0; iAn < nAnalysers; iAn++ )
                     analysersArray[iAn]->FinishEvent();
+
+                //for correlations: fill hist if any charged particles in eta range
+                if ( nCharged_inCuts > 0 )
+                {
+                    histMult_charged->Fill(nCharged_inCuts);
+                    histMult_Lambda0->Fill(nLambda0_inCuts);
+                    histMult_K0->Fill(nK0_inCuts);
+                    for ( int iPair = 0; iPair < nPairs; ++iPair )
+                    {
+                        histNN[iPair]->Fill( nChargedF[iPair], nChargedB[iPair] );
+                        histNsNs[iPair]->Fill( nChargedFs[iPair], nChargedBs[iPair] );
+                        histNsN[iPair]->Fill( nChargedF[iPair], nChargedBs[iPair] );
+                        histNskN[iPair]->Fill( nChargedF[iPair], nChargedBsk[iPair] );
+
+                        histNlN[iPair]->Fill( nChargedF[iPair], nChargedBlambda[iPair] );
+                        histNlNl[iPair]->Fill( nChargedFlambda[iPair], nChargedBlambda[iPair] );
+                        histNprotonN[iPair]->Fill( nChargedF[iPair], nChargedBproton[iPair] );
+
+                        if ( nChargedB[iPair] > 0 )
+                        {
+                            histPtN[iPair]->Fill( nChargedF[iPair], meanPt_B[iPair]/nChargedB[iPair] );
+                            histPtNs[iPair]->Fill( nChargedFs[iPair], meanPt_B[iPair]/nChargedB[iPair] );
+                            histPtNsk[iPair]->Fill( nChargedFsk[iPair], meanPt_B[iPair]/nChargedB[iPair] );
+                            histPtNl[iPair]->Fill( nChargedFlambda[iPair], meanPt_B[iPair]/nChargedB[iPair] );
+
+                            if ( nChargedF[iPair] > 0 )
+                                histPtPt[iPair]->Fill( meanPt_F[iPair]/nChargedF[iPair], meanPt_B[iPair]/nChargedB[iPair] );
+                        }
+
+
+                        if ( nChargedBpion[iPair] > 0 )
+                        {
+                            histKtoPion_N[iPair]->Fill( nChargedF[iPair], nChargedBkaon[iPair]/nChargedBpion[iPair] );
+                            histLambdaToPion_N[iPair]->Fill( nChargedF[iPair], nChargedBlambda[iPair]/nChargedBpion[iPair] );
+                            histProtonToPion_N[iPair]->Fill( nChargedF[iPair], nChargedBproton[iPair]/nChargedBpion[iPair] );
+                            if ( nChargedFpion[iPair] > 0 )
+                            {
+                                histKtoPion_KtoPion[iPair]->Fill( nChargedFkaon[iPair]/nChargedFpion[iPair], nChargedBkaon[iPair]/nChargedBpion[iPair] );
+                                histLambdaToPion_LambdaToPion[iPair]->Fill( nChargedFlambda[iPair]/nChargedFpion[iPair], nChargedBlambda[iPair]/nChargedBpion[iPair] );
+                            }
+                        }
+
+                        if ( nChargedBpion[iPair] > 0 && nChargedF[iPair] > 0)
+                        {
+                            histKtoPion_Pt[iPair]->Fill( meanPt_F[iPair]/nChargedF[iPair], nChargedBkaon[iPair]/nChargedBpion[iPair] );
+                            histLambdaToPion_Pt[iPair]->Fill( meanPt_F[iPair]/nChargedF[iPair], nChargedBlambda[iPair]/nChargedBpion[iPair] );
+                            histProtonToPion_Pt[iPair]->Fill( meanPt_F[iPair]/nChargedF[iPair], nChargedBproton[iPair]/nChargedBpion[iPair] );
+                        }
+
+                    }
+                } // if nCh in cuts > 0
+
+            }
 
             prevEvId = part.eventId;
             nAnalysedEvents++;
@@ -644,7 +826,10 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
             while ( prevEvId == part.eventId && iEntry+iParticleInArray < nentries)
             {
                 if ( iParticleInArray >= 5000 )
+                {
                     cout << "!!! iParticleInArray exceeds array size !!!" << endl;
+                    break;
+                }
                 //                cout << iParticleInArray << " " << part.eventId << endl;
                 treeParticles->GetEntry(iEntry+iParticleInArray); //
                 partArr[iParticleInArray] = part;
@@ -658,17 +843,6 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
             if ( part.eventId % 100 == 0 )
                 printf("Processing %d event...\n", part.eventId );
 
-
-            //for correlations: fill hist if any charged particles in eta range
-            if ( nCharged_inCuts > 0 )
-                for ( int iPair = 0; iPair < nPairs; ++iPair )
-                {
-                    histNN[iPair]->Fill( nChargedF[iPair], nChargedB[iPair] );
-                    if ( nChargedB[iPair] > 0 )
-                        histPtN[iPair]->Fill( nChargedF[iPair], meanPt_B[iPair]/nChargedB[iPair] );
-                }
-
-
             //refresh
             nCharged_inCuts = 0;
             nLambda0_inCuts = 0;
@@ -677,18 +851,35 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
             for ( int iPair = 0; iPair < nPairs; ++iPair )
             {
                 nChargedF[iPair] = 0;
-                nChargedB[iPair] = 0;
+                meanPt_F[iPair] = 0;
 
+                nChargedFs[iPair] = 0;
+                nChargedFsk[iPair] = 0;
+                nChargedFlambda[iPair] = 0;
+                nChargedFproton[iPair] = 0;
+                nChargedFkaon[iPair] = 0;
+                nChargedFpion[iPair] = 0;
+
+                nChargedB[iPair] = 0;
                 meanPt_B[iPair] = 0;
+
+                nChargedBs[iPair] = 0;
+                nChargedBsk[iPair] = 0;
+                nChargedBlambda[iPair] = 0;
+                nChargedBproton[iPair] = 0;
+                nChargedBkaon[iPair] = 0;
+                nChargedBpion[iPair] = 0;
             }
         }
 
-        mapTau0_byName.insert ( pair<string,double>( mapPID[part.id], part.tau0 ) );
+        if (part.eventId < 2000)
+            mapTau0_byName.insert ( pair<string,double>( mapPID[part.id], part.tau0 ) );
 
 
 
-                if ( fabs(part.eta) < 2.4 ) // eta cut
-//        if ( fabs(part.y) < 2 ) // eta or y cut
+//        if ( fabs(part.eta) < 2.4 ) // eta cut
+        if ( fabs(part.y) < 2.4 ) // eta cut
+            //        if ( fabs(part.y) < 2 ) // eta or y cut
         {
             //do we need to consider this particle?
             bool isParticleOfInterest = false;
@@ -716,30 +907,63 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
                     histEta_species[pofIdInArray]->Fill(part.eta);
                     histY_species[pofIdInArray]->Fill(part.y);
 
-                    if ( fabs(part.id) == 3122 || part.id == 310 ) //Lambda or K0S
+                    // fill eta and y for special choice of FB windows
+                    if ( part.y > 1 && part.y < 2 )
+                    {
+                        histEta_species_in_windows[pofIdInArray]->Fill(part.eta);
+                        histY_species_in_windows[pofIdInArray]->Fill(part.y);
+                    }
+                    if ( part.y > -2 && part.y < -1 )
+                    {
+                        histEta_species_in_windows[pofIdInArray]->Fill(part.eta);
+                        histY_species_in_windows[pofIdInArray]->Fill(part.y);
+                    }
+
+
+                    bool isFinalCharged = ( part.isFinal && part.isCharged );
+                    bool isStrange = ( fabs(part.id) == 3122 || part.id == 310 );
+                    bool isStrangeWithKaonsPM = ( fabs(part.id) == 3122 || part.id == 310 || fabs(part.id) == 321 );
+                    bool isLambda = ( fabs(part.id) == 3122 );
+                    bool isKaon = ( part.id == 310 || fabs(part.id) == 321 );
+                    bool isPion = ( fabs(part.id) == 211 );
+                    bool isProton = ( fabs(part.id) == 2212 );
+
+                    if ( isStrangeWithKaonsPM )  //fabs(part.id) == 3122 || part.id == 310 ) //Lambda or K0S
                     {
                         histEtaStrange->Fill(part.eta);
                         histYStrange->Fill(part.y);
                     }
 
-
                     //for correlations
                     for ( int iPair = 0; iPair < nPairs; ++iPair )
                     {
-//                        if ( fabs(part.id) == 3122 || part.id == 310 ) //Lambda or K0S
-//                        {
-//                        }
-                        if ( part.isFinal && part.isCharged )
-                        {
-                            if ( part.eta > etaMinF[iPair] && part.eta < etaMaxF[iPair] )
-                                nChargedF[iPair]++;
-                            if ( part.eta > etaMinB[iPair] && part.eta < etaMaxB[iPair] )
-                            {
-                                nChargedB[iPair]++;
-                                meanPt_B[iPair] += part.pt;
-                            }
 
+
+                        if ( part.y > etaMinF[iPair] && part.y < etaMaxF[iPair] )
+                        {
+                            if ( isFinalCharged)            nChargedF[iPair]++;
+                            if ( isFinalCharged )           meanPt_F[iPair] += part.pt;
+
+                            if ( isStrange )                nChargedFs[iPair]++;
+                            if ( isStrangeWithKaonsPM )     nChargedFsk[iPair]++;
+                            if ( isLambda )                 nChargedFlambda[iPair]++;
+                            if ( isKaon )                   nChargedFkaon[iPair]++;
+                            if ( isPion )                   nChargedFpion[iPair]++;
+                            if ( isProton )                 nChargedFproton[iPair]++;
                         }
+                        if ( part.y > etaMinB[iPair] && part.y < etaMaxB[iPair] )
+                        {
+                            if ( isFinalCharged )           nChargedB[iPair]++;
+                            if ( isFinalCharged )           meanPt_B[iPair] += part.pt;
+
+                            if ( isStrange )                nChargedBs[iPair]++;
+                            if ( isStrangeWithKaonsPM )     nChargedBsk[iPair]++;
+                            if ( isLambda )                 nChargedBlambda[iPair]++;
+                            if ( isKaon )                   nChargedBkaon[iPair]++;
+                            if ( isPion )                   nChargedBpion[iPair]++;
+                            if ( isProton )                 nChargedBproton[iPair]++;
+                        }
+
                     }
 
                 } // end of if (hasPrimaryMother)
@@ -820,6 +1044,16 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
 
 
 
+    TFile *fileOutput = new TFile( Form("analysisResults_%s_newWins2_Y_withPtPt.root", strTuneName.Data()),"RECREATE");
+    //    TFile *fileOutput = new TFile( "analysisResults.root","RECREATE");
+    histMult_charged->Write();
+    histMult_Lambda0->Write();
+    histMult_K0->Write();
+    histLambda0_daugthers_dEta->Write();
+    histEta->Write();
+    histEtaStrange->Write();
+    histYStrange->Write();
+
     TCanvas *canvChecks = new TCanvas("canvChecks","check plots",10,10,1200,600 );
     canvChecks->Divide(4,2);
     canvChecks->SetTopMargin(0.05);
@@ -859,7 +1093,6 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
 
 
 
-    TFile *f = new TFile( "analysisResults.root","RECREATE");
     for ( int iAn = 0; iAn < nAnalysers; iAn++ )
     {
         //        if ( analysersArray[iAn]->GetOutputFileId() == fileId )
@@ -872,7 +1105,6 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
     }
     //    fQAhistos.fHistNch->SetName("hist70-80");
     //    fQAhistos.fHistNch->Write();
-    f->Close();
 
 
     if (1)
@@ -885,7 +1117,22 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
         histYields->SetMarkerColor(kRed);
         histYields->SetMarkerStyle(21);
         histYields->DrawCopy("P");
+
+        histYields->Write();
     }
+
+    if (1) // write pt, eta, y for all species
+    {
+        for(int i = 0; i < nSpecies; i++)
+        {
+            histPt_species[i]->Write();
+            histEta_species[i]->Write();
+            histY_species[i]->Write();
+            histEta_species_in_windows[i]->Write();
+            histY_species_in_windows[i]->Write();
+        }
+    }
+    histWindowsEtaBounds->Write();
 
     if (1) //pT for Lambda, K0S
     {
@@ -928,10 +1175,13 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
         histPt_divided_Lambda_vs_K0S->Divide ( histPt_K0 );
         histPt_divided_Lambda_vs_K0S->SetName ( "histPt_Lambda_vs_K0S" );
         histPt_divided_Lambda_vs_K0S->DrawCopy("P");
+
+        histPt_divided_Lambda_vs_K0S->Write();
     }
 
-    if (1) //Y for Lambda, K0S
+    if (1) //Y_or_eta for Lambda, K0S
     {
+        // !!! careful! Y may mean eta-histogram below!
         TCanvas *canvY = new TCanvas("canvY","canvY",400,250,1000,600 );
         canvY->SetTopMargin(0.05);
         canvY->SetRightMargin(0.15);
@@ -939,25 +1189,25 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
         canvY->SetLeftMargin(0.15);
 
         // K0_S
-        TH1D *histY_K0 = histY_species[ idInArray(arrParticleSpecies, nSpecies, 310) ];
-        histY_K0->SetMarkerColor(kRed);
-        histY_K0->SetMarkerStyle(25);
-        histY_K0->DrawCopy("P");
+        TH1D *histEta_K0 = histEta_species[ idInArray(arrParticleSpecies, nSpecies, 310) ];
+        histEta_K0->SetMarkerColor(kRed);
+        histEta_K0->SetMarkerStyle(25);
+        histEta_K0->DrawCopy("P");
 
 
         // ##### Lambda and Antilambda ration VS Y
-        TH1D *histY_Lambda = histY_species[ idInArray(arrParticleSpecies, nSpecies, 3122) ];
-        TH1D *histY_AntiLambda = histY_species[ idInArray(arrParticleSpecies, nSpecies, 3122) ];
+        TH1D *histEta_Lambda = histEta_species[ idInArray(arrParticleSpecies, nSpecies, 3122) ];
+        TH1D *histEta_AntiLambda = histEta_species[ idInArray(arrParticleSpecies, nSpecies, 3122) ];
 
         //add L and AL
-        TH1D *histY_Lambda_AntiLambda = new TH1D( *histY_Lambda );
+        TH1D *histEta_Lambda_AntiLambda = new TH1D( *histEta_Lambda );
         // !!! don't add if want only lambda
-        histY_Lambda_AntiLambda->Add( histY_AntiLambda, 1. );
-        histY_Lambda_AntiLambda->SetName ( "histY_Lambda_AntiLambda" );
+        histEta_Lambda_AntiLambda->Add( histEta_AntiLambda, 1. );
+        histEta_Lambda_AntiLambda->SetName ( "histEta_Lambda_AntiLambda" );
 
-        histY_Lambda_AntiLambda->SetMarkerColor(kBlue);
-        histY_Lambda_AntiLambda->SetMarkerStyle(21);
-        histY_Lambda_AntiLambda->DrawCopy("P same");
+        histEta_Lambda_AntiLambda->SetMarkerColor(kBlue);
+        histEta_Lambda_AntiLambda->SetMarkerStyle(21);
+        histEta_Lambda_AntiLambda->DrawCopy("P same");
 
 
         //canvas with Lambda/K0S ratio
@@ -967,14 +1217,76 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
         canvY_ratio->SetBottomMargin(0.1);
         canvY_ratio->SetLeftMargin(0.15);
 
-        TH1D *histY_divided_Lambda_vs_K0S = new TH1D ( *histY_Lambda_AntiLambda );
-        histY_divided_Lambda_vs_K0S->Divide ( histY_K0 );
-        histY_divided_Lambda_vs_K0S->SetName ( "histY_Lambda_vs_K0S" );
-        histY_divided_Lambda_vs_K0S->DrawCopy("P");
+        TH1D *histEta_divided_Lambda_vs_K0S = new TH1D ( *histEta_Lambda_AntiLambda );
+        histEta_divided_Lambda_vs_K0S->Divide ( histEta_K0 );
+        histEta_divided_Lambda_vs_K0S->SetName ( "histEta_Lambda_vs_K0S" );
+        histEta_divided_Lambda_vs_K0S->DrawCopy("P");
+
+        histEta_divided_Lambda_vs_K0S->Write();
     }
 
 
+    if (1)
+    {
+        for (int i = 0; i < nPairs; ++i)
+        {
+            histNN[i]->Write();
+            histNsNs[i]->Write();
+            histNsN[i]->Write();
+            histNskN[i]->Write();
 
+            histNlN[i]->Write();
+            histNlNl[i]->Write();
+            histNprotonN[i]->Write();
+
+            histPtN[i]->Write();
+            histPtNs[i]->Write();
+            histPtNsk[i]->Write();
+            histPtNl[i]->Write();
+
+            histKtoPion_N[i]->Write();
+            histLambdaToPion_N[i]->Write();
+            histProtonToPion_N[i]->Write();
+            histKtoPion_KtoPion[i]->Write();
+            histLambdaToPion_LambdaToPion[i]->Write();
+
+            histKtoPion_Pt[i]->Write();
+            histLambdaToPion_Pt[i]->Write();
+            histProtonToPion_Pt[i]->Write();
+
+            histPtPt[i]->Write();
+
+            // PROFILES
+            histNN[i]->ProfileX()->Write();
+            histNsNs[i]->ProfileX()->Write();
+            histNsN[i]->ProfileX()->Write();
+            histNskN[i]->ProfileX()->Write();
+
+            histNlN[i]->ProfileX()->Write();
+            histNlNl[i]->ProfileX()->Write();
+            histNprotonN[i]->ProfileX()->Write();
+
+            histPtN[i]->ProfileX()->Write();
+            histPtNs[i]->ProfileX()->Write();
+            histPtNsk[i]->ProfileX()->Write();
+            histPtNl[i]->ProfileX()->Write();
+
+            histKtoPion_N[i]->ProfileX()->Write();
+            histLambdaToPion_N[i]->ProfileX()->Write();
+            histProtonToPion_N[i]->ProfileX()->Write();
+            histKtoPion_KtoPion[i]->ProfileX()->Write();
+            histLambdaToPion_LambdaToPion[i]->ProfileX()->Write();
+
+            histKtoPion_Pt[i]->ProfileX()->Write();
+            histLambdaToPion_Pt[i]->ProfileX()->Write();
+            histProtonToPion_Pt[i]->ProfileX()->Write();
+
+            histPtPt[i]->ProfileX()->Write();
+        }
+    }
+
+
+    //correlation plots
     if (1)
     {
         TCanvas *canvNN = new TCanvas("canvNN","canvNN",500,250,1200,800 );
@@ -1061,6 +1373,7 @@ void StrangenessAnalysis::RunAnalysis(int nEventsToAnalyse )
 
     }
 
+    fileOutput->Close();
 
     //    file->Close();
 

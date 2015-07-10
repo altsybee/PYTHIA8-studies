@@ -13,12 +13,19 @@
 #include <TStopwatch.h>
 #include <TRandom3.h>
 #include <TString.h>
+#include <TVectorD.h>
+#include <TArrayF.h>
+#include <TMap.h>
 
 #include <Pythia8/Pythia.h>
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <map>
+#include <vector>
+#include <string>
+
 
 //#include "../../../commonTools/Tools.cxx"
 //#include "../../../commonTools/SimpleTrack.cxx"
@@ -27,6 +34,12 @@
 
 
 using namespace std;
+
+#ifdef __MAKECINT__
+#pragma link C++ class std::map<int,std::string>+;
+#endif
+
+
 
 void fixPhi( float &phi )
 {
@@ -40,16 +53,95 @@ void fixPhi( float &phi )
 const double etaRange = 2.0;
 const double ptMin = 0.1;
 
-bool checkCuts( Pythia8::Particle &particle )
+
+map <int,string> pidMap;
+
+void addPidToMap( Pythia8::Particle &particle )
 {
-    return ( fabs( particle.eta() ) < etaRange && particle.pT() > ptMin );
-}
-bool checkEtaCut( Pythia8::Particle &particle )
-{
-    return ( fabs( particle.eta() ) < etaRange );
+    pidMap.insert ( pair<int,string>(particle.id(),particle.name()) );
 }
 
 
+/*
+ * Sort the particle ID array and particle name array in such a way that the largest contributions are in the beginning
+ *
+ *  int particleIDArray[2][100] = particle ID array that needs to sorted
+ *  TString particleNames[100] = particle name array that needs to be sorted
+ */
+void sortArrays(int particleIDArray[2][100], TString particleNames[100])
+{
+    bool arrayNotSorted = true;
+    int temporaryInt = 0;
+    TString tempararyString = "";
+    while(arrayNotSorted)
+    {
+        arrayNotSorted = false;
+        for( int i = 0; i < 99; i++ )
+        {
+            // If there is later number is larger, swap the two numbers and the same indices in other array
+            if(particleIDArray[1][i] < particleIDArray[1][i+1])
+            {
+                temporaryInt = particleIDArray[1][i];
+                particleIDArray[1][i] = particleIDArray[1][i+1];
+                particleIDArray[1][i+1] = temporaryInt;
+
+                temporaryInt = particleIDArray[0][i];
+                particleIDArray[0][i] = particleIDArray[0][i+1];
+                particleIDArray[0][i+1] = temporaryInt;
+
+                tempararyString = particleNames[i];
+                particleNames[i] = particleNames[i+1];
+                particleNames[i+1] = tempararyString;
+
+                arrayNotSorted = true;
+            }
+        }
+    }
+}
+
+/*
+ * Function to extract the particle ID and name from a PYTHIA particle and filling them into arrays.
+ * If this is the first appearence of a found particle type, the particle ID and name are given a new spot in the arrays
+ * If there is already a similar particle found, then the number of particles found in particleIDArray is incremented by one
+ *
+ *  Pythia8::Particle &currentParticle = PYTHIA8 particle containing the desired information
+ *  int particleIDArray[2][100] = array for particle IDs
+ *  TString particleNames[100] = array for particle names
+ */
+void addParticleToArray(Pythia8::Particle &currentParticle, int particleIDArray[2][100], TString particleNames[100])
+{
+    // First, find out if the particle is already in the array or not
+    int particleID = currentParticle.id();
+    int indexInArray = -1;
+    bool firstAppearance = false;
+    for(int i = 0; i < 100; i++)
+    {
+        // If we find the searched particle, remember its index
+        if(particleIDArray[0][i] == particleID)
+        {
+            indexInArray = i;
+            break;
+        }
+
+        // If the number in the first row is zero, we have gone through all the particles without finding a match
+        if(particleIDArray[0][i] == 0)
+        {
+            firstAppearance = true;
+            indexInArray = i;
+            break;
+        }
+    }
+
+    // If first appearence, put the particle name and ID to arrays
+    if(firstAppearance)
+    {
+        particleIDArray[0][indexInArray] = particleID;
+        particleNames[indexInArray] = Form("%s",currentParticle.name().c_str());
+    }
+
+    // Finally, increment the number of found particles of this type
+    particleIDArray[1][indexInArray]++;
+}
 
 /*
  * Main event loop
@@ -68,6 +160,12 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
     //create the file, the Tree and a few branches
     //    TFile file( "myTree.root", "recreate" );
 
+    // Array for particle information
+    const int nPIDforArray = 100;
+    int particleIDArray[2][nPIDforArray] = {0};  // First row = particle ID, second row = number of particles with this ID found
+    TString particleNames[nPIDforArray];         // Name for the particle which is in the same column in the particleIDArray
+
+    TH1D *histPID = new TH1D("histPID","histPID",nPIDforArray,0,nPIDforArray);
 
     int eventId   ;
     int particleId;
@@ -128,67 +226,61 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
     treeParticles->Branch("y"           ,&y         ,"y/F"     );
 
     treeParticles->Branch("id"          ,&id        ,"id/I"         );
-    treeParticles->Branch("status"      ,&status    ,"status/I"     );
+    //    treeParticles->Branch("status"      ,&status    ,"status/I"     );
     treeParticles->Branch("mother1"     ,&mother1   ,"mother1/I"    );
     treeParticles->Branch("mother2"     ,&mother2   ,"mother2/I"    );
     treeParticles->Branch("daughter1"   ,&daughter1 ,"daughter1/I"  );
     treeParticles->Branch("daughter2"   ,&daughter2 ,"daughter2/I"  );
-    treeParticles->Branch("px"          ,&px        ,"px/F"         );
-    treeParticles->Branch("py"          ,&py        ,"py/F"         );
-    treeParticles->Branch("pz"          ,&pz        ,"pz/F"         );
-    treeParticles->Branch("e"           ,&e         ,"e/F"          );
-    treeParticles->Branch("m"           ,&m         ,"m/F"          );
-    treeParticles->Branch("hasVertex"   ,&hasVertex ,"hasVertex/O"  );
-    treeParticles->Branch("xProd"       ,&xProd     ,"xProd/F"      );
-    treeParticles->Branch("yProd"       ,&yProd     ,"yProd/F"      );
-    treeParticles->Branch("zProd"       ,&zProd     ,"zProd/F"      );
-    treeParticles->Branch("tProd"       ,&tProd     ,"tProd/F"      );
+    //    treeParticles->Branch("px"          ,&px        ,"px/F"         );
+    //    treeParticles->Branch("py"          ,&py        ,"py/F"         );
+    //    treeParticles->Branch("pz"          ,&pz        ,"pz/F"         );
+    //    treeParticles->Branch("e"           ,&e         ,"e/F"          );
+    //    treeParticles->Branch("m"           ,&m         ,"m/F"          );
+    //    treeParticles->Branch("hasVertex"   ,&hasVertex ,"hasVertex/O"  );
+    //    treeParticles->Branch("xProd"       ,&xProd     ,"xProd/F"      );
+    //    treeParticles->Branch("yProd"       ,&yProd     ,"yProd/F"      );
+    //    treeParticles->Branch("zProd"       ,&zProd     ,"zProd/F"      );
+    //    treeParticles->Branch("tProd"       ,&tProd     ,"tProd/F"      );
     treeParticles->Branch("tau"         ,&tau       ,"tau/F"        );
 
-    treeParticles->Branch("theta"       ,&theta     ,"theta/F"      );
+    //    treeParticles->Branch("theta"       ,&theta     ,"theta/F"      );
 
     treeParticles->Branch("nDaughters"  ,&nDaughters,"nDaughters/I" );
-    treeParticles->Branch("nMothers"    ,&nMothers  ,"nMothers/I"   );
-    treeParticles->Branch("nSisters"    ,&nSisters  ,"nSisters/I"   );
+    //    treeParticles->Branch("nMothers"    ,&nMothers  ,"nMothers/I"   );
+    //    treeParticles->Branch("nSisters"    ,&nSisters  ,"nSisters/I"   );
 
     treeParticles->Branch("isFinal"   ,&isFinal        ,"isFinal/O" );
 
     treeParticles->Branch("isCharged"   ,&isCharged    ,"isCharged/O"   );
-    treeParticles->Branch("isNeutral"   ,&isNeutral    ,"isNeutral/O"   );
+    //    treeParticles->Branch("isNeutral"   ,&isNeutral    ,"isNeutral/O"   );
     treeParticles->Branch("tau0"        ,&tau0         ,"tau0/F"        );
-    treeParticles->Branch("mayDecay"    ,&mayDecay     ,"mayDecay/O"    );
-    treeParticles->Branch("canDecay"    ,&canDecay     ,"canDecay/O"    );
-    treeParticles->Branch("isResonance" ,&isResonance  ,"isResonance/O" );
-    treeParticles->Branch("isVisible"   ,&isVisible    ,"isVisible/O"   );
-    treeParticles->Branch("isLepton"    ,&isLepton     ,"isLepton/O"    );
-    treeParticles->Branch("isQuark"     ,&isQuark      ,"isQuark/O"     );
-    treeParticles->Branch("isGluon"     ,&isGluon      ,"isGluon/O"     );
-    treeParticles->Branch("isDiquark"   ,&isDiquark    ,"isDiquark/O"   );
+    //    treeParticles->Branch("mayDecay"    ,&mayDecay     ,"mayDecay/O"    );
+    //    treeParticles->Branch("canDecay"    ,&canDecay     ,"canDecay/O"    );
+    //    treeParticles->Branch("isResonance" ,&isResonance  ,"isResonance/O" );
+    //    treeParticles->Branch("isVisible"   ,&isVisible    ,"isVisible/O"   );
+    //    treeParticles->Branch("isLepton"    ,&isLepton     ,"isLepton/O"    );
+    //    treeParticles->Branch("isQuark"     ,&isQuark      ,"isQuark/O"     );
+    //    treeParticles->Branch("isGluon"     ,&isGluon      ,"isGluon/O"     );
+    //    treeParticles->Branch("isDiquark"   ,&isDiquark    ,"isDiquark/O"   );
     treeParticles->Branch("isParton"    ,&isParton     ,"isParton/O"    );
-    treeParticles->Branch("isHadron"    ,&isHadron     ,"isHadron/O"    );
+    //    treeParticles->Branch("isHadron"    ,&isHadron     ,"isHadron/O"    );
 
 
     // ##### event info tree
     int nCharged = 0;
-//    int nPionsPrimary = 0;
-//    int nPionsFromResonances = 0;
-//    int nPionsFromRho0 = 0;
-//    int nPionsFromRhoPlusMinus = 0;
-//    int pionsFromRho0_bothDetected = 0; //incremented by 2 if both pions within cuts
+    //    int nPionsPrimary = 0;
+    //    int nPionsFromResonances = 0;
+    //    int nPionsFromRho0 = 0;
+    //    int nPionsFromRhoPlusMinus = 0;
+    //    int pionsFromRho0_bothDetected = 0; //incremented by 2 if both pions within cuts
 
     TTree *treeEvent = new TTree( "eventMultTree","a simple Tree with simple variables");
     treeEvent->Branch("nCharged",                &nCharged,              "nCharged/I");
-//    treeEvent->Branch("nPionsPrimary",           &nPionsPrimary,         "nPionsPrimary/I");
-//    treeEvent->Branch("nPionsFromResonances",    &nPionsFromResonances,  "nPionsFromResonances/I");
-//    treeEvent->Branch("nPionsFromRho0",          &nPionsFromRho0,        "nPionsFromRho0/I");
-//    treeEvent->Branch("nPionsFromRhoPlusMinus",  &nPionsFromRhoPlusMinus,"nPionsFromRhoPlusMinus/I");
-//    treeEvent->Branch("pionsFromRho0_bothDetected",&pionsFromRho0_bothDetected,"pionsFromRho0_bothDetected/I");
-
-
-
-    // Array for particle information
-    int particleIDArray[2][100] = {0};  // First row = particle ID, second row = number of particles with this ID found
-    TString particleNames[100];         // Name for the particle which is in the same column in the particleIDArray
+    //    treeEvent->Branch("nPionsPrimary",           &nPionsPrimary,         "nPionsPrimary/I");
+    //    treeEvent->Branch("nPionsFromResonances",    &nPionsFromResonances,  "nPionsFromResonances/I");
+    //    treeEvent->Branch("nPionsFromRho0",          &nPionsFromRho0,        "nPionsFromRho0/I");
+    //    treeEvent->Branch("nPionsFromRhoPlusMinus",  &nPionsFromRhoPlusMinus,"nPionsFromRhoPlusMinus/I");
+    //    treeEvent->Branch("pionsFromRho0_bothDetected",&pionsFromRho0_bothDetected,"pionsFromRho0_bothDetected/I");
 
     // Create pythia8 object
     Pythia8::Pythia pythia8;
@@ -228,6 +320,19 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
         if( iEvent % 1000 == 0 )
             cout << "generating event " << iEvent << "..." << endl;
 
+        // Particle Loop to count particles in eta range
+        for (Int_t i = 0; i < numberOfParticles; i++)
+        {
+            if (pythia8.event[i].isFinal() && pythia8.event[i].isCharged()
+                    && fabs(pythia8.event[i].eta()) < 2.4 )
+                ++nCharged;
+        }
+
+        //nCharged cut
+        if ( nCharged == 0)
+            continue;
+
+        treeEvent->Fill();
 
         // Particle Loop to fill particle tree
         for (Int_t i = 0; i < numberOfParticles; i++)
@@ -262,8 +367,8 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
             tau         = particle.tau();
 
             theta         = particle.theta();
-            nDaughters    = particle.motherList().size();
-            nMothers      = particle.daughterList().size();
+            nDaughters    = particle.daughterList().size();
+            nMothers      = particle.motherList().size();
             nSisters      = particle.sisterList().size();
 
             isFinal         = particle.isFinal();
@@ -284,10 +389,14 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
 
             treeParticles->Fill();
 
-            if (pythia8.event[i].isFinal() && pythia8.event[i].isCharged())
+            //add particle pid to map
+            if (eventId < 5000)
             {
-                ++nCharged;
+                addPidToMap(particle);
+                //increment colomn for the pid-mother of this pion (cound be resonance or quark!)
+                addParticleToArray( particle, particleIDArray, particleNames );
             }
+
 
             // Lambda
             if(0)if ( particle.id() == 3122 )
@@ -302,9 +411,17 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
             }
 
         }//particle loop
-        treeEvent->Fill();
     }//event loop
 
+
+    // Sort the array so that the particles with the most entries are the first
+    sortArrays(particleIDArray,particleNames);
+
+    for(int i = 0; i < nPIDforArray; i++)
+    {
+        histPID->Fill( i+0.5, particleIDArray[1][i] );
+        histPID->GetXaxis()->SetBinLabel( i+1, particleNames[i].Data()) ;
+    }
 
     // Display some statistics
     pythia8.stat();
@@ -316,6 +433,26 @@ void pythia8_extractToTree(Int_t nEvent  = 100, const char *config="configPythia
     //    hCrossSectionInfo->Fill(1.5,nAccepted);
     //    hCrossSectionInfo->Fill(2.5,sigmaGen);
     //    hCrossSectionInfo->Fill(3.5,nEvent);
+
+
+    //#### write pid-name correspondance
+    TArrayF *arrPid = new TArrayF(pidMap.size());
+    TH1D *histArrPidNames = new TH1D("histArrPidNames","histArrPidNames",500,0,500);
+
+    cout << "pidMap.size()=" << pidMap.size() << endl;
+    // check pid map
+    int iPid = 0;
+    for (auto it = pidMap.begin(); it != pidMap.end(); ++it)
+    {
+        cout << iPid << ": " << (*it).first << " : " << (*it).second << endl;
+        arrPid->AddAt((*it).first,iPid);
+        histArrPidNames->GetXaxis()->SetBinLabel( iPid+1, (*it).second.c_str() ) ;
+        iPid++;
+    }
+    fout->WriteObject(arrPid,"arrPid");
+
+    fout->ls();
+
     fout->Write();
     fout->Close();
     cout <<"Successfully finished."<< endl;
